@@ -4,8 +4,9 @@ spacecraft_model = {
     "Blue Origin New Shepard": 8_000
 }
 
-# Ask the user to confirm their input.
+
 def confirm_input(prompt, value):
+    """Ask the user to confirm their input."""
     while True:
         confirmation = input(f"\n  You entered '{value}'. Confirm? (Y/N): ").strip().lower()
         if confirmation in ["y", "yes"]:
@@ -14,91 +15,85 @@ def confirm_input(prompt, value):
             return None
         print("  ⚠ Error: Please enter Y/N or Yes/No.")
 
-# Get user-selected spacecraft model.
+
+def get_user_input(prompt, validation, error_msg, formatter=lambda x: x):
+    """Generalized input function with validation and confirmation."""
+    while True:
+        try:
+            value = input(f"\n  {prompt}: ").strip()
+            value = formatter(value)
+            if validation(value):
+                if confirm_input(prompt, value):
+                    return value
+        except ValueError:
+            pass
+        print(f"  ⚠ Error: {error_msg}")
+
+
 def get_spacecraft_model():
+    """Get user-selected spacecraft model."""
     while True:
-        while True:
-            print("\n  Please choose your spacecraft model:")
-            # Display modules available
-            for index, model in enumerate(spacecraft_model.keys(), 1):
-                print(f"\t{index}. {model} (${spacecraft_model[model]:,}/day)")
+        print("\n  Please choose your spacecraft model:")
+        models = list(spacecraft_model.keys())
+        for index, model in enumerate(models, 1):
+            print(f"\t{index}. {model} (${spacecraft_model[model]:,}/day)")
 
-            model = input("  Please enter the index or full name: ").strip()
+        def validate_model(value):
+            if value.isdigit():
+                index = int(value) - 1
+                return 0 <= index < len(models)
+            normalized_value = value.lower().replace(" ", "")
+            return any(normalized_value == m.lower().replace(" ", "") for m in models)
 
-            if model.isdigit():
-                index = int(model) - 1
-                if 0 <= index < len(spacecraft_model):
-                    selected_model = list(spacecraft_model.keys())[index]
-                    if confirm_input("Spacecraft Model", selected_model):
-                        return selected_model
-                    else:
-                        break  # Restart input immediately
+        def format_model(value):
+            if value.isdigit():
+                return models[int(value) - 1]
+            normalized_value = value.lower().replace(" ", "")
+            for model in models:
+                if normalized_value == model.lower().replace(" ", ""):
+                    return model
 
-            regularise_input = model.lower().replace(" ", "")
-            for model in spacecraft_model:
-                if regularise_input == model.lower().replace(" ", ""):
-                    if confirm_input("Spacecraft Model", model):
-                        return model
-                    else:
-                        break  # Restart input immediately
+        return get_user_input("Enter the index or full name", validate_model, "Invalid spacecraft model", format_model)
 
-            print("  ⚠ Error: Invalid spacecraft model, please try again!")
 
-# Get hire duration (1-30 days).
 def get_hire_period():
-    while True:
-        while True:
-            try:
-                period = int(input("\n  Please enter the hiring duration (1-30 days): "))
-                if 1 <= period <= 30:
-                    if confirm_input("Hire Period", f"{period} days"):
-                        return period
-                    else:
-                        break  # Restart input immediately
-                else:
-                    print("  ⚠ Error: Hiring duration must be between 1 and 30 days.")
-            except ValueError:
-                print("  ⚠ Error: Please enter a valid number!")
+    """Get hire duration (1-30 days)."""
+    return get_user_input("Enter the hiring duration (1-30 days)", lambda x: x.isdigit() and 1 <= int(x) <= 30,
+                          "Hiring duration must be between 1 and 30 days", int)
 
-# Get number of passengers (0-10).
+
 def get_passenger_count():
-    while True:
-        while True:
-            try:
-                count = int(input("\n  Please enter the number of passengers (0-10): "))
-                if 0 <= count <= 10:
-                    if confirm_input("Passenger Count", f"{count} passengers"):
-                        return count
-                    else:
-                        break  # Restart input immediately
-                else:
-                    print("  ⚠ Error: Number of passengers must be between 0 and 10!")
-            except ValueError:
-                print("  ⚠ Error: Please enter a valid number!")
+    """Get number of passengers (0-10)."""
+    return get_user_input("Enter the number of passengers (0-10)", lambda x: x.isdigit() and 0 <= int(x) <= 10,
+                          "Number of passengers must be between 0 and 10!", int)
 
-# Ask if the user needs a pilot.
+
 def get_pilot_choice():
-    while True:
-        while True:
-            pilot = input("\n  Do you need a pilot? (Y/N): ").strip().lower()
-            if pilot in ["y", "yes"]:
-                if confirm_input("Pilot Requirement", "Yes"):
-                    return True
-                else:
-                    break  # Restart input immediately
-            elif pilot in ["n", "no"]:
-                if confirm_input("Pilot Requirement", "No"):
-                    return False
-                else:
-                    break  # Restart input immediately
-            print("  ⚠ Error: Please enter Y/N or Yes/No.")
+    """Ask if the user needs a pilot."""
+    return get_user_input("Do you need a pilot? (Y/N)", lambda x: x.lower() in ["y", "yes", "n", "no"],
+                          "Please enter Y/N or Yes/No", lambda x: x.lower() in ["y", "yes"])
 
-# Calculate total cost based on selections.
+
 def calculate_cost(model, period, has_pilot, passengers):
+    """Calculate total cost based on selections."""
     daily_rate = spacecraft_model[model]
     pilot_cost = 500 * period if has_pilot else 0
     passenger_cost = 500 * passengers * period
     return (daily_rate * period) + pilot_cost + passenger_cost
+
+
+def print_receipt(spacecraft, period, passengers, has_pilot, total):
+    """Print the final hire receipt."""
+    print("\n" + "=" * 50)
+    print("Hire Receipt".center(50))
+    print("-" * 50)
+    print(f"\tSpacecraft Model: {spacecraft}")
+    print(f"\tHire Period: {period} days")
+    print(f"\tPassengers: {passengers}")
+    print(f"\tPilot Required: {'Yes' if has_pilot else 'No'}")
+    print("*" * 50)
+    print(f"\tTotal Cost: ${total:,.2f}")
+    print("*" * 50)
 
 
 def main():
@@ -113,20 +108,9 @@ def main():
         passengers = get_passenger_count()
         total = calculate_cost(spacecraft, period, has_pilot, passengers)
 
-        print("\n" + "=" * 50)
-        print("Hire Receipt".center(50))
-        print("-" * 50)
-        print(f"\tSpacecraft Model: {spacecraft}")
-        print(f"\tHire Period: {period} days")
-        print(f"\tPassengers: {passengers}")
-        print(f"\tPilot Required: {'Yes' if has_pilot else 'No'}")
-        print("*" * 50)
-        print(f"\tTotal Cost: ${total:,.2f}")
-        print("*" * 50)
+        print_receipt(spacecraft, period, passengers, has_pilot, total)
 
-
-        restart = input("\nWould you like to restart? (Y/N): ").strip().lower()
-        if restart not in ["y", "yes"]:
+        if input("\nWould you like to restart? (Y/N): ").strip().lower() not in ["y", "yes"]:
             print("\nThank you for using our service! Goodbye!")
             break
 
