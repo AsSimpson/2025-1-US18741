@@ -1,8 +1,7 @@
-a = ["Geeks", "for", "Geeks"]
+spacecraft = input("spacecraft")
+period = input("period")
+passengers = input("passengers")
 
-# Iterating list using enumerate to get both index and element
-for i, name in enumerate(a):
-    print(f"Index {i}: {name}")
-
-# Converting to a list of tuples
-print(list(enumerate(a)))
+print("\tSpacecraft Model: " + str(spacecraft).rjust(20))
+print("\tHire Period: " + str(period).rjust(20) + " days")
+print("\tPassengers: " + str(passengers).rjust(20))

@@ -1,9 +1,13 @@
+from datetime import datetime
+# Todo: add a date module, print date information and receipt number then at the end.
+
 spacecraft_model = {
     "Rocket Lab Photon": 10_000,
     "SpaceX Falcon 9": 5_000,
     "Blue Origin New Shepard": 8_000
 }
 
+# Todo: Add a welcome screen, record the personal information to print on the receipt btw
 
 # Ask the user to confirm their input.
 def confirm_input(prompt, value):
@@ -46,6 +50,8 @@ def get_spacecraft_model():
 
             print("  ⚠ Error: Invalid spacecraft model, please try again!")
 
+def welcome():
+    print("")
 
 # Get hire duration (1-30 days).
 def get_hire_period():
@@ -106,11 +112,15 @@ def calculate_cost(model, period, has_pilot, passengers):
     passenger_cost = 500 * passengers * period
     return (daily_rate * period) + pilot_cost + passenger_cost
 
-
+# Print the final hire receipt.
 def print_receipt(spacecraft, period, passengers, has_pilot, total):
-    """Print the final hire receipt."""
     print("\n" + "=" * 50)
     print("Hire Receipt".center(50))
+    print("-" * 50)
+
+    date = datetime.now().strftime("%d-%m-%y--%H:%M")
+    print(f"Inquiry date: {date} (dd-mm-yy-(time))")
+
     print("-" * 50)
     print(f"\tSpacecraft Model: {spacecraft}")
     print(f"\tHire Period: {period} days")
@@ -119,12 +129,13 @@ def print_receipt(spacecraft, period, passengers, has_pilot, total):
     print("*" * 50)
     print(f"\tTotal Cost: ${total:,.2f}")
     print("*" * 50)
+    print("=" * 50)
 
 
 def main():
     while True:
         print("=" * 50)
-        print("Space Exploration Company".center(50))
+        print("Spacecraft Hire Calculator".center(50))
         print("-" * 50)
 
         spacecraft = get_spacecraft_model()
@@ -132,7 +143,6 @@ def main():
         has_pilot = get_pilot_choice()
         passengers = get_passenger_count()
         total = calculate_cost(spacecraft, period, has_pilot, passengers)
-
         print_receipt(spacecraft, period, passengers, has_pilot, total)
 
         restart = input("\nWould you like to restart? (Y/N): ").strip().lower()
