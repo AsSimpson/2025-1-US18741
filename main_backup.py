@@ -161,7 +161,9 @@ def main():
         restart = input("\nWould you like to restart? (Y/N)🤔: ").strip().lower()
         if restart not in ["y", "yes"]:
             print(f"\nThank you for using our service {user_name}! Goodbye! („• ֊ •„)੭")
-            print(figlet_format("See You !", font="standard"))
+            print(r'''
+            
+            ''')
             break
 
 

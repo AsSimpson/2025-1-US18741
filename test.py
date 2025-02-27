@@ -1,7 +1,32 @@
-spacecraft = input("spacecraft")
-period = input("period")
-passengers = input("passengers")
+# from pyfiglet import figlet_format
+#
+# print( figlet_format("SpaceCraft", font = "standard" ) )
 
-print("\tSpacecraft Model: " + str(spacecraft).rjust(20))
-print("\tHire Period: " + str(period).rjust(20) + " days")
-print("\tPassengers: " + str(passengers).rjust(20))
+print(r"""                                                                                                       
+                                                        
+                                                        
+                                                        
+                   .. .++++--++++.                      
+                  -+-+.          .-+-                   
+                 -+ .+.              --.                
+               .+--  .-                +.               
+              .+.--   +                .+-              
+             .+  .---+.                  +.             
+             --                          .-             
+             +.     .+++.      .+++.     .+             
+             -.    --   -+    +-   --    .+             
+             --                          .-             
+             .+       ............       +.             
+              .+.    +.          .+    .+.              
+               .+.   .+.        .+.   .+.               
+                 --.   .++-..-++.   .--                 
+                   .+-            -+.                   
+                      .--++-+++--.                      
+                                                        
+                                                        
+                                                        
+""")
+
+while True:
+    exit_choice = input("do you want to exit the program? y/n ")
+    if exit_choice == "y": break
