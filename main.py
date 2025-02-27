@@ -9,15 +9,18 @@ spacecraft_model_price = {
 }
 
 def welcome():
+    global user_name
     print(figlet_format("SpaceCraft", font="standard"))
     while True:
         user_name = input("ヾ(＾ ∇ ＾). What is your name?\n ")
         user_name_plain = user_name.replace(" ", "")
+        if 5 < int(datetime.now().strftime("%H")) < 12: greet_time = "morning"
+        elif 12 <= int(datetime.now().strftime("%H")) < 19: greet_time = "afternoon"
+        else: greet_time = "night"
         if user_name_plain.isalpha():
-            if (user_name_plain.lower().strip() == "wright" or user_name_plain.lower().strip() == "nickwright"
-                or user_name_plain.lower().strip() == "nick"): user_name = "Mr Wright"
+            if user_name_plain.lower().strip() in ["wright", "nick", "nickwright"]: user_name = "Mr Wright"
             user_name = capwords(user_name)
-            print(f"Hello {user_name}! Hope you are well, thank you for choosing this program! ⸜(｡˃ ᵕ ˂ )⸝♡\n")
+            print(f"Good {greet_time} {user_name}! Hope you are well, thank you for choosing this program! ⸜(｡˃ ᵕ ˂ )⸝♡\n")
             return user_name
         else:
             print('🚨 user_name must be consisted by alpha. "( – ⌓ – ) ')
@@ -130,7 +133,7 @@ def print_receipt(spacecraft, period, passengers, has_pilot, total):
     print("Inquiry Result".center(50))
     print("-" * 50)
 
-    date = datetime.now().strftime("%d-%b-%Y--%H:%M:%S")
+    date = datetime.now().strftime("%d-%b-%Y--%p %H:%M:%S")
     print(f"Inquiry date: {date}")
 
     print("-" * 50)
@@ -143,31 +146,34 @@ def print_receipt(spacecraft, period, passengers, has_pilot, total):
     print("*" * 50)
     print("=" * 50)
 
+def restart_program():
+    while True:
+        restart = input("\nWould you like to restart? (Y/N)🤔: ").strip().lower()
+        if restart in ["n", "no"]:
+            print(f"\nThank you for using our service {user_name}! Goodbye! („• ֊ •„)੭")
+            print(figlet_format("See You !", font="standard"))
+            return True
+        elif restart in ["y", "yes"]:
+            return False
+        print("  🚨 Error: Please enter Y/N or Yes/No.")
+
 
 def main():
     while True:
-        user_name = welcome()
-        #
-        # print("=" * 50)
-        # print("🚀Spacecraft Hire Calculator🚀".center(50))
-        # print("-" * 50)
-        #
-        # spacecraft = get_spacecraft_model_price()
-        # period = get_hire_period()
-        # has_pilot = get_pilot_choice()
-        # passengers = get_passenger_count()
-        # total = calculate_cost(spacecraft, period, has_pilot, passengers)
-        # print_receipt(spacecraft, period, passengers, has_pilot, total)
+        welcome()
 
-        while True:
-            restart = input("\nWould you like to restart? (Y/N)🤔: ").strip().lower()
-            if restart in ["n", "no"]:
-                print(f"\nThank you for using our service {user_name}! Goodbye! („• ֊ •„)੭")
-                print(figlet_format("See You !", font="standard"))
-                return
-            elif restart  in ["y", "yes"]: break
-            print("  🚨 Error: Please enter Y/N or Yes/No.")
+        print("=" * 50)
+        print("🚀Spacecraft Hire Calculator🚀".center(50))
+        print("-" * 50)
 
+        spacecraft = get_spacecraft_model_price()
+        period = get_hire_period()
+        has_pilot = get_pilot_choice()
+        passengers = get_passenger_count()
+        total = calculate_cost(spacecraft, period, has_pilot, passengers)
+        print_receipt(spacecraft, period, passengers, has_pilot, total)
+
+        if restart_program(): return
 
 
 if __name__ == "__main__":
