@@ -1,5 +1,4 @@
 from datetime import datetime
-from pyfiglet import figlet_format
 from string import capwords
 
 spacecraft_model_price = {
@@ -9,14 +8,22 @@ spacecraft_model_price = {
 }
 
 def welcome():
-    print(figlet_format("SpaceCraft", font="standard"))
+    print(r'''
+ ____                        ____            __ _   
+/ ___| _ __   __ _  ___ ___ / ___|_ __ __ _ / _| |_ 
+\___ \| '_ \ / _` |/ __/ _ \ |   | '__/ _` | |_| __|
+ ___) | |_) | (_| | (_|  __/ |___| | | (_| |  _| |_ 
+|____/| .__/ \__,_|\___\___|\____|_|  \__,_|_|  \__|
+      |_|                                           
+    ''')
     while True:
         user_name = input("ヾ(＾ ∇ ＾). What is your name?\n ")
-        if user_name.isalpha():
-            if (user_name.lower().strip() == "wright" or user_name.lower().strip() == "nick wright"
-                or user_name.lower().strip() == "nick"): user_name = "Mr Wright"
+        user_name_plain = user_name.replace(" ", "")
+        if user_name_plain.isalpha():
+            if (user_name_plain.lower().strip() == "wright" or user_name_plain.lower().strip() == "nickwright"
+                or user_name_plain.lower().strip() == "nick"): user_name = "Mr Wright"
             user_name = capwords(user_name)
-            print(f"Hello! {user_name} hope you are well, welcome to use this program! ⸜(｡˃ ᵕ ˂ )⸝♡\n")
+            print(f"Hello {user_name}! Hope you are well, thank you for choosing this program! ⸜(｡˃ ᵕ ˂ )⸝♡\n")
             return user_name
         else:
             print('🚨 user_name must be consisted by alpha. "( – ⌓ – ) ')
@@ -146,25 +153,33 @@ def print_receipt(spacecraft, period, passengers, has_pilot, total):
 def main():
     while True:
         user_name = welcome()
+        #
+        # print("=" * 50)
+        # print("🚀Spacecraft Hire Calculator🚀".center(50))
+        # print("-" * 50)
+        #
+        # spacecraft = get_spacecraft_model_price()
+        # period = get_hire_period()
+        # has_pilot = get_pilot_choice()
+        # passengers = get_passenger_count()
+        # total = calculate_cost(spacecraft, period, has_pilot, passengers)
+        # print_receipt(spacecraft, period, passengers, has_pilot, total)
 
-        print("=" * 50)
-        print("Spacecraft Hire Calculator".center(50))
-        print("-" * 50)
+        while True:
+            restart = input("\nWould you like to restart? (Y/N)🤔: ").strip().lower()
+            if restart in ["n", "no"]:
+                print(f"\nThank you for using our service {user_name}! Goodbye! („• ֊ •„)੭")
+                print(r'''
+ ____             __   __            _ 
+/ ___|  ___  ___  \ \ / /__  _   _  | |
+\___ \ / _ \/ _ \  \ V / _ \| | | | | |
+ ___) |  __/  __/   | | (_) | |_| | |_|
+|____/ \___|\___|   |_|\___/ \__,_| (_)
+                ''')
+                return
+            elif restart  in ["y", "yes"]: break
+            print("  🚨 Error: Please enter Y/N or Yes/No.")
 
-        spacecraft = get_spacecraft_model_price()
-        period = get_hire_period()
-        has_pilot = get_pilot_choice()
-        passengers = get_passenger_count()
-        total = calculate_cost(spacecraft, period, has_pilot, passengers)
-        print_receipt(spacecraft, period, passengers, has_pilot, total)
-
-        restart = input("\nWould you like to restart? (Y/N)🤔: ").strip().lower()
-        if restart not in ["y", "yes"]:
-            print(f"\nThank you for using our service {user_name}! Goodbye! („• ֊ •„)੭")
-            print(r'''
-            
-            ''')
-            break
 
 
 if __name__ == "__main__":

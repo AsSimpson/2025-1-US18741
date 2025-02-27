@@ -12,11 +12,12 @@ def welcome():
     print(figlet_format("SpaceCraft", font="standard"))
     while True:
         user_name = input("ヾ(＾ ∇ ＾). What is your name?\n ")
-        if user_name.isalpha():
-            if (user_name.lower().strip() == "wright" or user_name.lower().strip() == "nick wright"
-                or user_name.lower().strip() == "nick"): user_name = "Mr Wright"
+        user_name_plain = user_name.replace(" ", "")
+        if user_name_plain.isalpha():
+            if (user_name_plain.lower().strip() == "wright" or user_name_plain.lower().strip() == "nickwright"
+                or user_name_plain.lower().strip() == "nick"): user_name = "Mr Wright"
             user_name = capwords(user_name)
-            print(f"Hello! {user_name} hope you are well, welcome to use this program! ⸜(｡˃ ᵕ ˂ )⸝♡\n")
+            print(f"Hello {user_name}! Hope you are well, thank you for choosing this program! ⸜(｡˃ ᵕ ˂ )⸝♡\n")
             return user_name
         else:
             print('🚨 user_name must be consisted by alpha. "( – ⌓ – ) ')
@@ -146,23 +147,27 @@ def print_receipt(spacecraft, period, passengers, has_pilot, total):
 def main():
     while True:
         user_name = welcome()
+        #
+        # print("=" * 50)
+        # print("🚀Spacecraft Hire Calculator🚀".center(50))
+        # print("-" * 50)
+        #
+        # spacecraft = get_spacecraft_model_price()
+        # period = get_hire_period()
+        # has_pilot = get_pilot_choice()
+        # passengers = get_passenger_count()
+        # total = calculate_cost(spacecraft, period, has_pilot, passengers)
+        # print_receipt(spacecraft, period, passengers, has_pilot, total)
 
-        print("=" * 50)
-        print("Spacecraft Hire Calculator".center(50))
-        print("-" * 50)
+        while True:
+            restart = input("\nWould you like to restart? (Y/N)🤔: ").strip().lower()
+            if restart in ["n", "no"]:
+                print(f"\nThank you for using our service {user_name}! Goodbye! („• ֊ •„)੭")
+                print(figlet_format("See You !", font="standard"))
+                return
+            elif restart  in ["y", "yes"]: break
+            print("  🚨 Error: Please enter Y/N or Yes/No.")
 
-        spacecraft = get_spacecraft_model_price()
-        period = get_hire_period()
-        has_pilot = get_pilot_choice()
-        passengers = get_passenger_count()
-        total = calculate_cost(spacecraft, period, has_pilot, passengers)
-        print_receipt(spacecraft, period, passengers, has_pilot, total)
-
-        restart = input("\nWould you like to restart? (Y/N)🤔: ").strip().lower()
-        if restart not in ["y", "yes"]:
-            print(f"\nThank you for using our service {user_name}! Goodbye! („• ֊ •„)੭")
-            print(figlet_format("See You !", font="standard"))
-            break
 
 
 if __name__ == "__main__":
