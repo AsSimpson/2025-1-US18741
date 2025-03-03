@@ -1,6 +1,7 @@
 from datetime import datetime
 from pyfiglet import figlet_format
 from string import capwords
+from time import sleep
 
 spacecraft_model_price = {
     "Rocket Lab Photon": 10_000,
@@ -152,6 +153,7 @@ def restart_program():
         if restart in ["n", "no"]:
             print(f"\nThank you for using our service {user_name}! Goodbye! („• ֊ •„)੭")
             print(figlet_format("See You !", font="standard"))
+            sleep(1)
             return True
         elif restart in ["y", "yes"]:
             return False
