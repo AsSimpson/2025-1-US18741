@@ -1,5 +1,6 @@
 from datetime import datetime
 from string import capwords
+from time import sleep
 
 spacecraft_model_price = {
     "Rocket Lab Photon": 10_000,
@@ -164,6 +165,7 @@ def restart_program():
  ___) |  __/  __/   | | (_) | |_| | |_|
 |____/ \___|\___|   |_|\___/ \__,_| (_)
                             ''')
+            sleep(1)
             return True
         elif restart in ["y", "yes"]:
             return False
